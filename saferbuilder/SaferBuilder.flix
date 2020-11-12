@@ -50,13 +50,14 @@ namespace SaferBuilder {
         }
     }
 
-    def test(): Unit = {
-        let pizza = pizzaBuilder
-            .withDough(true)
-            .withSauce(true)
-            .withCheese(true)
-            .build();
-        ()
+    @test
+    def test(): Pizza = {
+        let pb1 = pizzaBuilder();
+        let pb2 = withDough(true, pb1);
+        let pb3 = withSauce(true, pb2);
+        let pb4 = withCheese(true, pb3);
+        /// let pb5 = withCheese(true, pb4); error
+        pb4.build()
     }
 
 

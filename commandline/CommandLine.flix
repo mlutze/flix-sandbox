@@ -14,46 +14,40 @@ namespace CommandLine {
     Options may be supplied in any order, or appear multiple times. The interpretation is left up to the particular application program. 
 
 */
-    type alias Parser[a] = Map[String, a]
-
-    enum Arg {
-        case Positional
-        case Named
-    }
-
     type alias Arg = {
         shortName: Option[String],
         longName: Option[String]
     }
 
-    enum Rule {
-        case MutuallyExclusive(List[Arg])
-        case Codependent(List[Arg])
+    pub enum Rule[a] {
+        case MutuallyExclusive(List[a])
+        case Codependent(List[a])
+        case Required(a)
     }
 
     type alias Parser[a] = {
-        positionalArgs: List[a],
-        namedArgs: Map[]
+        args: List[a],
+        options: Map[String, a],
+        rules: Set[Rule[a]]
     }
 
-    def emptyParser(): Parser[a] = {
-        positionalArgs = Nil,
-        namedArgs = Map#{}
+    pub def emptyParser(): Parser[a] = {
+        args = Nil,
+        options = Map#{},
+        rules = Set#{}
     }
 
-    def withArg(name: String, parser: Parser): = {
-
-    }
+    pub def withArg(value: a, parser: Parser[a]): Parser[a] = { args = value :: parser.args | parser }
     
-    type alias ParsingResult[a] = Result[Map[a, String], ParsingError]
+    type alias ParsingResult[a] = Result[Map[a, String], ParsingError[a]]
 
-    enum ParsingError {
+    pub enum ParsingError[a] {
         case UnexpectedOption(String)
+        case BrokenRule(Rule[a])
     }
 
     pub def parse(args: List[String], parser: Parser[a]): ParsingResult[a] = {
-        match args {
-            case Nil
-        }
+        ???
     }
+
 }
