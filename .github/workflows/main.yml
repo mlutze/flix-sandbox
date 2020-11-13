@@ -11,9 +11,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-    - name: Get Flix
-      uses: wei/curl@master
-      with:
-        args: -L https://github.com/flix/flix/releases/download/v0.14.3/flix.jar
+    - run: curl -L https://github.com/flix/flix/releases/download/v0.14.3/flix.jar > flix.jar
     - run: java -jar flix.jar test
 
