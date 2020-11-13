@@ -11,7 +11,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.11
-    - name: Hello world action step
+    - name: Test Flix
       id: flix-test
       uses: mlutze/flix-test-action@v0.1
       with:
