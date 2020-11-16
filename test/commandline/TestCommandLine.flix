@@ -10,4 +10,7 @@ namespace TestCommandLine {
                 Map.isEmpty(success.options) && List.isEmpty(success.tailArgs)
         }
     }
+    
+    @test
+    def fail(): Bool = false
 }
