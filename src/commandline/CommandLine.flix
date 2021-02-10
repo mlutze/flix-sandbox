@@ -142,11 +142,11 @@ namespace CommandLine {
                 matches > 1
             case Codependent(opts) =>
                 let matches = Map.count(k -> _ -> List.memberOf(k, opts), options);
-                matches != 0 && matches != List.length(opts)
+                matches != 0 and matches != List.length(opts)
             case Required(opt) =>
-                !Map.memberOf(opt, options)
+                not Map.memberOf(opt, options)
             case NoTailArgs =>
-                !List.isEmpty(tailArgs)
+                not List.isEmpty(tailArgs)
         }
     }
 }

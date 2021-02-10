@@ -10,7 +10,7 @@ type alias Automaton[q, a] = {
 pub def accepts(input: List[a], automaton: Automaton[q, a]): Bool = {
     let lookup_one = state -> input_one -> Set.flatMap(x ->
         match x {
-            case (from, in, to) if from == state && in == input_one => Set#{to}
+            case (from, in, to) if from == state and in == input_one => Set#{to}
             case _ => Set#{}
         }
         )(automaton.transitions);
@@ -25,11 +25,11 @@ pub def accepts(input: List[a], automaton: Automaton[q, a]): Bool = {
 /// * It has no transitions entering the initial state
 /// * It has no transitions leaving the final state
 pub def isNormal(automaton: Automaton[q, a]): Bool = {
-    Set.size(automaton.initialStates) == 1 &&
-    Set.size(automaton.finalStates) == 1 &&
-    !Set.exists(x -> 
+    Set.size(automaton.initialStates) == 1 and
+    Set.size(automaton.finalStates) == 1 and
+    not Set.exists(x -> 
         match x {
-            case (from, _, to) => Set.memberOf(to, automaton.initialStates) || Set.memberOf(from, automaton.finalStates)
+            case (from, _, to) => Set.memberOf(to, automaton.initialStates) or Set.memberOf(from, automaton.finalStates)
         }
     )(automaton.transitions)
 }

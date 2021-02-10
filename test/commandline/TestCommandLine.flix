@@ -7,7 +7,7 @@ namespace TestCommandLine {
         match result {
             case Err(_) => false
             case Ok(success) =>
-                Map.isEmpty(success.options) && List.isEmpty(success.tailArgs)
+                Map.isEmpty(success.options) and List.isEmpty(success.tailArgs)
         }
     }
 }
