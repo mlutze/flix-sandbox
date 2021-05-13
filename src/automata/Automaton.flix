@@ -7,16 +7,17 @@ type alias Automaton[q, a] = {
 }
 
 /// Returns true if the automaton accepts the input.
-pub def accepts(input: List[a], automaton: Automaton[q, a]): Bool = {
-    let lookup_one = state -> input_one -> Set.flatMap(x ->
+pub def accepts(_input: List[a], automaton: Automaton[q, a]): Bool with Eq[a], Eq[q], Order[q] = {
+    let _lookup_one = state -> input_one -> Set.flatMap(x ->
         match x {
             case (from, in, to) if from == state and in == input_one => Set#{to}
             case _ => Set#{}
         }
         )(automaton.transitions);
-    let lookup_all = states -> input_one -> Set.flatMap(state -> lookup_one(state, input_one))(states);
-    let finalStates = Set.toList(List.fold(lookup_all, automaton.initialStates, input));
-    List.exists(state -> Set.memberOf(state, automaton.finalStates))(finalStates)
+        bug!("will fix this later")
+    /// let lookup_all = states -> input_one -> Set.flatMap(state -> lookup_one(state, input_one))(states);
+    /// let finalStates = Set.toList(List.fold(lookup_all, automaton.initialStates, input));
+    /// List.exists(state -> Set.memberOf(state, automaton.finalStates))(finalStates)
 }
 
 /// An automaton is normal if:
@@ -24,7 +25,7 @@ pub def accepts(input: List[a], automaton: Automaton[q, a]): Bool = {
 /// * It has 1 final state
 /// * It has no transitions entering the initial state
 /// * It has no transitions leaving the final state
-pub def isNormal(automaton: Automaton[q, a]): Bool = {
+pub def isNormal(automaton: Automaton[q, a]): Bool with Order[q] = {
     Set.size(automaton.initialStates) == 1 and
     Set.size(automaton.finalStates) == 1 and
     not Set.exists(x -> 
@@ -34,7 +35,7 @@ pub def isNormal(automaton: Automaton[q, a]): Bool = {
     )(automaton.transitions)
 }
 
-pub def normalize(automaton: Automaton[q, a], newInitial: q, newFinal: q): Automaton[q, a] = {
+pub def normalize(automaton: Automaton[q, a], newInitial: q, newFinal: q): Automaton[q, a] with Order[q], Order[a] = {
     let leavingInitial = Set.filter(x -> 
         match x {
             case (from, _, _) => Set.memberOf(from, automaton.initialStates)
@@ -64,7 +65,7 @@ pub def normalize(automaton: Automaton[q, a], newInitial: q, newFinal: q): Autom
     }
 }
 
-pub def charToStringAutomaton(automaton: Automaton[q, Char]): Automaton[q, String] = {
+pub def charToStringAutomaton(automaton: Automaton[q, Char]): Automaton[q, String] with Order[q] = {
     alphabet = Set.map(Char.toString, automaton.alphabet),
     transitions = Set.map(x -> 
         match x {

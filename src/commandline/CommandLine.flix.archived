@@ -30,7 +30,7 @@ namespace CommandLine {
 
     type alias MultiMap[k, v] = Map[k, List[v]]
 
-    def insert(key: k, value: v, map: MultiMap[k, v]): MultiMap[k, v] = {
+    def insert(key: k, value: v, map: MultiMap[k, v]): MultiMap[k, v] with Eq[v], Order[k] = {
         Map.insertWith(List.append, key, value :: Nil, map)
     }
 
@@ -57,11 +57,11 @@ namespace CommandLine {
         case MissingOptionValue(a)
     }
 
-    pub def parse(args: List[String], parser: Parser[a]): ParsingResult[a] = {
+    pub def parse(args: List[String], parser: Parser[a]): ParsingResult[a] with Eq[a], Order[a] = {
         parseHelper(args, parser, Map#{}, Nil)
     }
 
-    def parseHelper(args: List[String], parser: Parser[a], matchedArgs: MultiMap[a, String], tailArgs: List[String]): ParsingResult[a] = {
+    def parseHelper(args: List[String], parser: Parser[a], matchedArgs: MultiMap[a, String], tailArgs: List[String]): ParsingResult[a] with Eq[a], Order[a] = {
         match args {
             case Nil => checkRules(matchedArgs, tailArgs, parser.rules)
             case head :: tail => // last argument
@@ -124,7 +124,7 @@ namespace CommandLine {
         }
     }
 
-    def checkRules(options: MultiMap[a, String], tailArgs: List[String], rules: List[Rule[a]]): ParsingResult[a] = {
+    def checkRules(options: MultiMap[a, String], tailArgs: List[String], rules: List[Rule[a]]): ParsingResult[a] with Order[a], Eq[a] = {
         let brokenRule = List.find(breaksRule(options, tailArgs), rules);
         match brokenRule {
             case None => Ok({
@@ -135,7 +135,7 @@ namespace CommandLine {
         }
     }
 
-    def breaksRule(options: MultiMap[a, String], tailArgs: List[String], rule: Rule[a]): Bool ={
+    def breaksRule(options: MultiMap[a, String], tailArgs: List[String], rule: Rule[a]): Bool with Eq[a], Order[a] = {
         match rule {
             case MutuallyExclusive(opts) =>
                 let matches = Map.count(k -> _ -> List.memberOf(k, opts), options);

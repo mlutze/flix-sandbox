@@ -1,20 +1,20 @@
 namespace TBool {
 
-    pub opaque type TBool[_b :# Bool] = Unit
+    pub opaque type TBool[_b: Bool] = Unit
 
-    class CBool[b :# Bool] {
-        def toTerm(t: TBool[b]): Bool
+    lawless class CBool[b: Bool] {
+        pub def toTerm(t: TBool[b]): Bool
     }
 
     instance CBool[true] {
-        def toTerm(t: TBool[true]): Bool = true
+        pub def toTerm(_: TBool[true]): Bool = true
     }
 
     instance CBool[false] {
-        def toTerm(t: TBool[false]): Bool = false
+        pub def toTerm(_: TBool[false]): Bool = false
     }
 
-    class IsTrue[b :# Bool]
+    class IsTrue[b: Bool]
 
     instance IsTrue[true]
 
@@ -24,6 +24,6 @@ namespace TBool {
 
     class Something[a]
 
-    instance Something[a -> b & e] with [e : IsTrue]
+    instance Something[a -> b & e] with IsTrue[e]
 
 }

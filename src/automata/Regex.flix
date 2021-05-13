@@ -1,4 +1,13 @@
 namespace Regex {
+    instance Eq[Regex] {
+        pub def eq(l: Regex, r: Regex): Bool = match (l, r) {
+            case (Star(l1), Star(r1)) => l1 == r1
+            case (Or(l1, l2), Or(r1, r2)) => l1 == r1 and l2 == r2
+            case (Concat(l1, l2), Concat(r1, r2)) => l1 == r1 and l2 == r2
+            case (Lit(l1), Lit(r1)) => l1 == r1
+            case _ => false
+        }
+    }
     pub enum Regex {
         case Star(Regex)
         case Or(Regex, Regex)
